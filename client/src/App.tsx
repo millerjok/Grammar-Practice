@@ -637,8 +637,8 @@ export default function App() {
             
             {/* Footer / Instructions */}
             <div className="mt-12 text-center text-sm text-slate-600 pb-8">
-              <p>Vocabulary Limited to JLPT N5/N4 for Practice Clarity</p>
-              <p className="mt-2">Powered by Google Gemini</p>
+              <p>Vocabulary Limited to Japanese Beginners for Practice Clarity</p>
+              <p className="mt-2">Created by Wong Sensei</p>
             </div>
           </div>
         ) : (
