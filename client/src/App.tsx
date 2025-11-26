@@ -330,7 +330,7 @@ const LevelCard = ({ level, onSelect }: { level: any, onSelect: any }) => {
     <div className="mb-4">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full text-left p-4 flex justify-between items-center border transition-all duration-200 ${level.color} ${isOpen ? 'rounded-t-xl border-b-0' : 'rounded-xl hover:brightness-110'}`}
+        className={`w-full text-left p-4 flex justify-between items-center border transition-all duration-200 cursor-pointer ${level.color} ${isOpen ? 'rounded-t-xl border-b-0' : 'rounded-xl hover:brightness-110'}`}
       >
         <div>
           <h2 className="text-xl font-bold">{level.level}</h2>
@@ -356,7 +356,7 @@ const LevelCard = ({ level, onSelect }: { level: any, onSelect: any }) => {
                   <button
                     key={i}
                     onClick={() => onSelect(item, level.level)}
-                    className="text-left px-6 py-4 hover:bg-slate-700 transition-colors duration-200 border-r border-slate-700 last:border-r-0 flex items-center justify-between group"
+                    className="text-left px-6 py-4 hover:bg-slate-700 transition-colors duration-200 border-r border-slate-700 last:border-r-0 flex items-center justify-between group cursor-pointer"
                   >
                     <span className="text-slate-300 font-medium group-hover:text-red-400">{item}</span>
                     <ChevronRight size={16} className="text-slate-600 group-hover:text-red-400" />
