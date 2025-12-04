@@ -490,12 +490,18 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
   const handleCopy = () => {
     if (questions.length === 0) return;
 
-    const text = `Japanese Grammar Practice: ${grammarPoint}\n${usage ? `Usage: ${usage}\n` : ''}\n` +
+    const questionsText = `Japanese Grammar Practice: ${grammarPoint}\n${usage ? `Usage: ${usage}\n` : ''}\n` +
+      `Exercises: Translate to Japanese\n` +
+      questions.map((q, i) => 
+        `${i + 1}. ${q.english}`
+      ).join('\n\n');
+      
+    const answersText = `\n\n--- ANSWER KEY ---\n\n` +
       questions.map((q, i) => 
         `${i + 1}. ${q.english}\n   Answer: ${q.japanese} (${q.kana})\n   Tip: ${q.tip}`
       ).join('\n\n');
 
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(questionsText + answersText);
     alert("Questions copied to clipboard!");
   };
 
@@ -600,7 +606,6 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
       {/* Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 no-print">
         <div className="flex items-center space-x-2">
-          <Sparkles size={18} className="text-yellow-500" />
         </div>
         <div className="flex space-x-3">
           <button 
