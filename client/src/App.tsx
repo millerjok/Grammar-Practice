@@ -699,7 +699,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 font-sans text-slate-100">
+    <div className="min-h-screen bg-slate-900 font-sans text-slate-100 print:bg-white print:text-black">
       <Header />
       
       <main className="py-8">

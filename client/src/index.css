@@ -7,11 +7,10 @@
     size: portrait;
   }
 
-  body {
-    background: white !important;
+  /* Force root elements to be white */
+  html, body, #root, main, div {
+    background-color: white !important;
     color: black !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 
   /* Hide UI elements */
