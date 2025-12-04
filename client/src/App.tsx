@@ -28,7 +28,9 @@ const GRAMMAR_DATA = [
   {
     level: "Level 1",
     description: "Foundational Grammar",
-    color: "bg-red-900/30 text-red-200 border-red-800/50",
+    color: "bg-red-900/30 border-red-800/50",
+    textDark: "text-red-200",
+    textLight: "text-red-700",
     sections: [
       {
         title: "Basic Actions & Requests",
@@ -90,7 +92,9 @@ const GRAMMAR_DATA = [
   {
     level: "Level 2",
     description: "Common & Essential Grammar",
-    color: "bg-blue-900/30 text-blue-200 border-blue-800/50",
+    color: "bg-blue-900/30 border-blue-800/50",
+    textDark: "text-blue-200",
+    textLight: "text-blue-700",
     sections: [
       {
         title: "Essential Conditionals",
@@ -186,7 +190,9 @@ const GRAMMAR_DATA = [
   {
     level: "Level 3",
     description: "Advanced Connectors & Nuance",
-    color: "bg-emerald-900/30 text-emerald-200 border-emerald-800/50",
+    color: "bg-emerald-900/30 border-emerald-800/50",
+    textDark: "text-emerald-200",
+    textLight: "text-emerald-700",
     sections: [
       {
         title: "Time & Timing",
@@ -244,7 +250,9 @@ const GRAMMAR_DATA = [
   {
     level: "Level 4",
     description: "Idioms & Advanced Phrasing",
-    color: "bg-violet-900/30 text-violet-200 border-violet-800/50",
+    color: "bg-violet-900/30 border-violet-800/50",
+    textDark: "text-violet-200",
+    textLight: "text-violet-700",
     sections: [
       {
         title: "Passive / Causative (Core VCE)",
@@ -341,7 +349,7 @@ const LevelCard = ({ level, onSelect, theme }: { level: any, onSelect: any, them
     <div className="mb-4">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full text-left p-4 flex justify-between items-center border transition-all duration-200 cursor-pointer ${level.color} ${isOpen ? 'rounded-t-xl border-b-0' : 'rounded-xl hover:brightness-110'}`}
+        className={`w-full text-left p-4 flex justify-between items-center border transition-all duration-200 cursor-pointer ${level.color} ${theme === 'dark' ? level.textDark : level.textLight} ${isOpen ? 'rounded-t-xl border-b-0' : 'rounded-xl hover:brightness-110'}`}
       >
         <div>
           <h2 className="text-xl font-bold">{level.level}</h2>
@@ -762,7 +770,7 @@ export default function App() {
             {/* Footer / Instructions */}
             <div className="mt-12 text-center text-sm text-slate-600 pb-8">
               <p>Vocabulary Limited to Japanese Beginners for Practice Clarity</p>
-              <p className="mt-2">Created by Wong Sensei</p>
+              <p className="mt-2">For troubleshooting, please email: soullennon41@gmail.com</p>
             </div>
           </div>
         ) : (
