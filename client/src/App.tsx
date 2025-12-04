@@ -534,12 +534,12 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
           <div className="space-y-6">
             <h3 className="text-lg font-bold border-b border-black pb-2 mb-4">Exercises: Translate to Japanese</h3>
             {questions.map((q, i) => (
-              <div key={q.id} className="mb-6 break-inside-avoid">
-                <div className="flex items-baseline mb-2">
+              <div key={q.id} className="mb-3 break-inside-avoid">
+                <div className="flex items-baseline mb-1">
                   <span className="font-bold mr-3 text-black">{i + 1}.</span>
-                  <p className="text-lg text-black">{q.english}</p>
+                  <p className="text-base text-black">{q.english}</p>
                 </div>
-                <div className="h-24 border-b border-black border-dashed mt-2"></div>
+                <div className="h-16 border-b border-black border-dashed mt-1"></div>
               </div>
             ))}
           </div>
@@ -552,18 +552,18 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
             <p className="text-sm text-black">{grammarPoint}</p>
           </div>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-4">
             {questions.map((q, i) => (
-              <div key={q.id} className="mb-6 p-4 bg-white rounded-lg border border-black break-inside-avoid">
-                <div className="flex items-baseline mb-2">
-                  <span className="font-bold mr-3 text-black">{i + 1}.</span>
-                  <p className="font-medium text-black">{q.english}</p>
+              <div key={q.id} className="p-3 bg-white rounded-lg border border-black break-inside-avoid">
+                <div className="flex items-baseline mb-1">
+                  <span className="font-bold mr-2 text-black">{i + 1}.</span>
+                  <p className="font-medium text-black text-sm">{q.english}</p>
                 </div>
-                <div className="ml-6 space-y-1">
-                  <p className="text-xl font-bold mt-1 text-black">{q.japanese}</p>
-                  <p className="text-sm text-black">{q.kana}</p>
-                  <p className="text-xs text-black italic mt-1">{q.romaji}</p>
-                  <div className="mt-2 text-xs border border-black inline-block px-2 py-1 rounded text-black">
+                <div className="ml-5 space-y-0.5">
+                  <p className="text-lg font-bold text-black">{q.japanese}</p>
+                  <p className="text-xs text-black">{q.kana}</p>
+                  <p className="text-[10px] text-black italic">{q.romaji}</p>
+                  <div className="mt-1 text-[10px] border border-black inline-block px-1.5 py-0.5 rounded text-black">
                     Tip: {q.tip}
                   </div>
                 </div>
