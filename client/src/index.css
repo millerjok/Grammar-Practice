@@ -48,12 +48,12 @@
   }
 
   p, li {
-    color: #333 !important;
+    color: black !important;
   }
   
   /* Ensure borders print */
   .border, .border-b, .border-t {
-    border-color: #ddd !important;
+    border-color: black !important;
   }
 }
 
