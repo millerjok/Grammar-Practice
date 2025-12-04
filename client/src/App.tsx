@@ -318,7 +318,7 @@ const Header = () => (
         </div>
         <div>
           <h1 className="text-xl font-bold text-slate-100">Japanese Grammar</h1>
-          <p className="text-xs text-slate-400 font-medium tracking-wide">AI PRACTICE DOJO</p>
+          <p className="text-xs text-slate-400 font-medium tracking-wide">Chiaki Education</p>
         </div>
       </div>
     </div>
@@ -601,9 +601,6 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 no-print">
         <div className="flex items-center space-x-2">
           <Sparkles size={18} className="text-yellow-500" />
-          <span className="text-sm font-medium text-slate-400">
-            AI-Generated Exercises (N5-N4 Vocabulary)
-          </span>
         </div>
         <div className="flex space-x-3">
           <button 
