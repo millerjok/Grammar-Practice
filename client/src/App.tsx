@@ -10,7 +10,9 @@ import {
   Sparkles,
   School,
   Printer,
-  Copy
+  Copy,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 // --- Configuration & Data ---
@@ -309,23 +311,30 @@ const HighlightKanji = ({ text }: { text: string }) => {
   );
 };
 
-const Header = () => (
-  <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-10">
+const Header = ({ theme, toggleTheme }: { theme: 'dark' | 'light', toggleTheme: () => void }) => (
+  <header className={`${theme === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'} border-b sticky top-0 z-10 transition-colors duration-200`}>
     <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
       <div className="flex items-center space-x-2">
         <div className="bg-red-600 text-white p-2 rounded-lg">
           <School size={24} />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-slate-100">Japanese Grammar</h1>
+          <h1 className={`text-xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Japanese Grammar</h1>
           <p className="text-xs text-slate-400 font-medium tracking-wide">Chiaki Education</p>
         </div>
       </div>
+      <button
+        onClick={toggleTheme}
+        className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+        aria-label="Toggle theme"
+      >
+        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      </button>
     </div>
   </header>
 );
 
-const LevelCard = ({ level, onSelect }: { level: any, onSelect: any }) => {
+const LevelCard = ({ level, onSelect, theme }: { level: any, onSelect: any, theme: 'dark' | 'light' }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -339,17 +348,17 @@ const LevelCard = ({ level, onSelect }: { level: any, onSelect: any }) => {
           <span className="text-sm font-medium opacity-80">{level.description}</span>
         </div>
         <ChevronDown 
-          className={`transition-transform duration-200 text-slate-300 ${isOpen ? 'rotate-180' : ''}`} 
+          className={`transition-transform duration-200 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} ${isOpen ? 'rotate-180' : ''}`} 
           size={24} 
         />
       </button>
 
       {isOpen && (
-        <div className="bg-slate-800 border border-slate-700 rounded-b-xl shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200">
+        <div className={`${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} border rounded-b-xl shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200`}>
           {level.sections.map((section: any, idx: number) => (
-            <div key={idx} className="border-b last:border-0 border-slate-700">
+            <div key={idx} className={`border-b last:border-0 ${theme === 'dark' ? 'border-slate-700' : 'border-slate-100'}`}>
               {section.title !== "Core Expressions" && section.title !== "Basic Actions & Requests" && (
-                <div className="px-6 py-2 bg-slate-900/50 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <div className={`px-6 py-2 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'bg-slate-900/50 text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
                   {section.title}
                 </div>
               )}
@@ -358,10 +367,10 @@ const LevelCard = ({ level, onSelect }: { level: any, onSelect: any }) => {
                   <button
                     key={i}
                     onClick={() => onSelect(item, level.level)}
-                    className="text-left px-6 py-4 hover:bg-slate-700 transition-colors duration-200 border-r border-slate-700 last:border-r-0 flex items-center justify-between group cursor-pointer"
+                    className={`text-left px-6 py-4 transition-colors duration-200 border-r last:border-r-0 flex items-center justify-between group cursor-pointer ${theme === 'dark' ? 'hover:bg-slate-700 border-slate-700' : 'hover:bg-slate-50 border-slate-100'}`}
                   >
-                    <span className="text-slate-300 font-medium group-hover:text-red-400">{item}</span>
-                    <ChevronRight size={16} className="text-slate-600 group-hover:text-red-400" />
+                    <span className={`font-medium group-hover:text-red-400 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>{item}</span>
+                    <ChevronRight size={16} className={`group-hover:text-red-400 ${theme === 'dark' ? 'text-slate-600' : 'text-slate-300'}`} />
                   </button>
                 ))}
               </div>
@@ -373,7 +382,7 @@ const LevelCard = ({ level, onSelect }: { level: any, onSelect: any }) => {
   );
 };
 
-const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, level: any, onBack: any }) => {
+const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: any, level: any, onBack: any, theme: 'dark' | 'light' }) => {
   const [questions, setQuestions] = useState<any[]>([]);
   const [usage, setUsage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -576,31 +585,31 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
       {/* Screen View Navigation & Header */}
       <button 
         onClick={onBack} 
-        className="flex items-center text-slate-400 hover:text-slate-200 mb-6 transition-colors no-print"
+        className={`flex items-center mb-6 transition-colors no-print ${theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
       >
         <ArrowLeft size={18} className="mr-2" />
         Back to Grammar List
       </button>
 
-      <div className="bg-slate-800 rounded-2xl p-8 shadow-lg border border-slate-700 mb-8 text-center relative overflow-hidden no-print">
+      <div className={`rounded-2xl p-8 shadow-lg border mb-8 text-center relative overflow-hidden no-print ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 to-pink-600"></div>
-        <span className="inline-block px-3 py-1 rounded-full bg-slate-700 text-slate-300 text-xs font-bold tracking-wider mb-3">
+        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider mb-3 ${theme === 'dark' ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
           {level}
         </span>
-        <h2 className="text-3xl font-bold text-slate-100 mb-2">{grammarPoint}</h2>
+        <h2 className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>{grammarPoint}</h2>
         
         {/* Usage Display */}
         <div className="min-h-[2rem] mb-3 flex justify-center">
            {usage ? (
-             <div className="inline-block bg-slate-900/50 px-4 py-2 rounded-lg border border-slate-600 backdrop-blur-sm shadow-inner">
-               <span className="text-indigo-300 font-mono text-sm font-medium tracking-wide">{usage}</span>
+             <div className={`inline-block px-4 py-2 rounded-lg border backdrop-blur-sm shadow-inner ${theme === 'dark' ? 'bg-slate-900/50 border-slate-600' : 'bg-slate-50 border-slate-200'}`}>
+               <span className={`font-mono text-sm font-medium tracking-wide ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600'}`}>{usage}</span>
              </div>
            ) : loading ? (
-             <div className="h-8 w-64 bg-slate-700/50 rounded-lg animate-pulse"></div>
+             <div className={`h-8 w-64 rounded-lg animate-pulse ${theme === 'dark' ? 'bg-slate-700/50' : 'bg-slate-200'}`}></div>
            ) : null}
         </div>
 
-        <p className="text-slate-400">Translate the sentences below into Japanese.</p>
+        <p className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Translate the sentences below into Japanese.</p>
       </div>
 
       {/* Controls */}
@@ -611,7 +620,7 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
           <button 
             onClick={handlePrint}
             disabled={loading || !!error || questions.length === 0}
-            className="flex items-center px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-50"
+            className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50 ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
           >
             <Printer size={16} className="mr-2"/>
             Print Worksheet
@@ -619,7 +628,7 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
           <button 
             onClick={handleCopy}
             disabled={loading || !!error || questions.length === 0}
-            className="flex items-center px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-50"
+            className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50 ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
           >
             <Copy size={16} className="mr-2"/>
             Copy Questions
@@ -627,7 +636,7 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
           <button 
             onClick={toggleAll}
             disabled={loading || !!error}
-            className="flex items-center px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-700 transition-colors shadow-sm"
+            className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
           >
             {showAllAnswers ? <EyeOff size={16} className="mr-2"/> : <Eye size={16} className="mr-2"/>}
             {showAllAnswers ? "Hide All" : "Show All"}
@@ -647,15 +656,15 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
       {loading ? (
         <div className="space-y-4 animate-pulse no-print">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-32 bg-slate-800 border border-slate-700 rounded-xl"></div>
+            <div key={i} className={`h-32 rounded-xl border ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}></div>
           ))}
         </div>
       ) : error ? (
-        <div className="text-center py-12 bg-red-900/20 rounded-xl border border-red-800/50 no-print">
-          <p className="text-red-400 mb-4">{error}</p>
+        <div className={`text-center py-12 rounded-xl border no-print ${theme === 'dark' ? 'bg-red-900/20 border-red-800/50' : 'bg-red-50 border-red-200'}`}>
+          <p className={`mb-4 ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>{error}</p>
           <button 
             onClick={() => generateQuestions()}
-            className="text-red-400 font-bold hover:underline"
+            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
           >
             Try Again
           </button>
@@ -668,24 +677,32 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
               <div 
                 key={q.id} 
                 onClick={() => toggleReveal(q.id)}
-                className="bg-slate-800 rounded-xl border border-slate-700 p-6 cursor-pointer hover:border-indigo-500 hover:shadow-lg transition-all duration-200 group"
+                className={`rounded-xl border p-6 cursor-pointer transition-all duration-200 group ${
+                  theme === 'dark' 
+                    ? 'bg-slate-800 border-slate-700 hover:border-indigo-500 hover:shadow-lg' 
+                    : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-md'
+                }`}
               >
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-medium text-slate-200 pr-8">{q.english}</h3>
-                  <div className={`p-2 rounded-full ${isRevealed ? 'bg-indigo-900/50 text-indigo-400' : 'bg-slate-700 text-slate-500 group-hover:bg-indigo-900/30 group-hover:text-indigo-400'}`}>
+                  <h3 className={`text-lg font-medium pr-8 ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>{q.english}</h3>
+                  <div className={`p-2 rounded-full ${
+                    isRevealed 
+                      ? (theme === 'dark' ? 'bg-indigo-900/50 text-indigo-400' : 'bg-indigo-50 text-indigo-600') 
+                      : (theme === 'dark' ? 'bg-slate-700 text-slate-500 group-hover:bg-indigo-900/30 group-hover:text-indigo-400' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-500')
+                  }`}>
                     {isRevealed ? <EyeOff size={18} /> : <BookOpen size={18} />}
                   </div>
                 </div>
 
                 <div className={`transition-all duration-300 overflow-hidden ${isRevealed ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="pt-4 border-t border-slate-700 mt-2 space-y-1">
-                    <p className="text-xl text-indigo-400 font-bold font-sans-jp">
+                  <div className={`pt-4 border-t mt-2 space-y-1 ${theme === 'dark' ? 'border-slate-700' : 'border-slate-100'}`}>
+                    <p className={`text-xl font-bold font-sans-jp ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'}`}>
                       <HighlightKanji text={q.japanese} />
                     </p>
-                    <p className="text-sm text-slate-400">{q.kana}</p>
+                    <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{q.kana}</p>
                     <div className="flex justify-between items-end mt-2">
-                       <p className="text-xs text-slate-500 italic">{q.romaji}</p>
-                       <span className="text-xs bg-indigo-900/50 text-indigo-300 px-2 py-1 rounded">
+                       <p className={`text-xs italic ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>{q.romaji}</p>
+                       <span className={`text-xs px-2 py-1 rounded ${theme === 'dark' ? 'bg-indigo-900/50 text-indigo-300' : 'bg-indigo-50 text-indigo-700'}`}>
                          Tip: {q.tip}
                        </span>
                     </div>
@@ -693,7 +710,7 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
                 </div>
                 
                 {!isRevealed && (
-                   <p className="text-sm text-slate-600 italic mt-2">Click to reveal translation</p>
+                   <p className={`text-sm italic mt-2 ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>Click to reveal translation</p>
                 )}
               </div>
             );
@@ -709,6 +726,11 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
 export default function App() {
   const [selectedGrammar, setSelectedGrammar] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   const handleSelect = (item: string, levelName: string) => {
     setSelectedGrammar(item);
@@ -722,19 +744,19 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 font-sans text-slate-100 print:bg-white print:text-black">
-      <Header />
+    <div className={`min-h-screen font-sans transition-colors duration-200 ${theme === 'dark' ? 'bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-900'} print:bg-white print:text-black`}>
+      <Header theme={theme} toggleTheme={toggleTheme} />
       
       <main className="py-8">
         {!selectedGrammar ? (
           <div className="max-w-5xl mx-auto px-4">
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-slate-100 mb-3">Select a Grammar Point</h2>
-              <p className="text-slate-400">Choose a topic below to generate practice exercises.</p>
+              <h2 className={`text-3xl font-bold mb-3 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Select a Grammar Point</h2>
+              <p className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Choose a topic below to generate practice exercises.</p>
             </div>
             
             {GRAMMAR_DATA.map((level, idx) => (
-              <LevelCard key={idx} level={level} onSelect={handleSelect} />
+              <LevelCard key={idx} level={level} onSelect={handleSelect} theme={theme} />
             ))}
             
             {/* Footer / Instructions */}
@@ -748,6 +770,7 @@ export default function App() {
             grammarPoint={selectedGrammar} 
             level={selectedLevel} 
             onBack={handleBack} 
+            theme={theme}
           />
         )}
       </main>
