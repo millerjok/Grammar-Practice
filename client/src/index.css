@@ -1,2 +1,63 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
+@media print {
+  @page {
+    margin: 2cm;
+    size: portrait;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide UI elements */
+  header, 
+  button, 
+  .no-print,
+  nav {
+    display: none !important;
+  }
+
+  /* Reset container widths */
+  .max-w-4xl, .max-w-5xl {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Print-specific visibility */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Page breaks */
+  .print-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+    margin-top: 2rem;
+  }
+
+  /* Typography for print */
+  h1, h2, h3 {
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  p, li {
+    color: #333 !important;
+  }
+  
+  /* Ensure borders print */
+  .border, .border-b, .border-t {
+    border-color: #ddd !important;
+  }
+}
+
+/* Hide print-only elements on screen */
+.print-only {
+  display: none;
+}
