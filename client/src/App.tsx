@@ -9,7 +9,8 @@ import {
   EyeOff, 
   Sparkles,
   School,
-  Printer
+  Printer,
+  Copy
 } from 'lucide-react';
 
 // --- Configuration & Data ---
@@ -486,6 +487,18 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
     window.print();
   };
 
+  const handleCopy = () => {
+    if (questions.length === 0) return;
+
+    const text = `Japanese Grammar Practice: ${grammarPoint}\n${usage ? `Usage: ${usage}\n` : ''}\n` +
+      questions.map((q, i) => 
+        `${i + 1}. ${q.english}\n   Answer: ${q.japanese} (${q.kana})\n   Tip: ${q.tip}`
+      ).join('\n\n');
+
+    navigator.clipboard.writeText(text);
+    alert("Questions copied to clipboard!");
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Print-only View */}
@@ -600,6 +613,14 @@ const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: any, leve
           >
             <Printer size={16} className="mr-2"/>
             Print Worksheet
+          </button>
+          <button 
+            onClick={handleCopy}
+            disabled={loading || !!error || questions.length === 0}
+            className="flex items-center px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-sm font-medium text-slate-200 hover:bg-slate-700 transition-colors shadow-sm disabled:opacity-50"
+          >
+            <Copy size={16} className="mr-2"/>
+            Copy Questions
           </button>
           <button 
             onClick={toggleAll}
