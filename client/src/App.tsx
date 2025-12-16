@@ -266,7 +266,6 @@ const GRAMMAR_DATA = [
         title: "Partial Negation",
         items: [
           "～わけではない (doesn’t necessarily mean…)",
-          "～とは限らない (not always…)",
           "～とはかぎらない (not necessarily…)",
           "～からといって (just because...)"
         ]
