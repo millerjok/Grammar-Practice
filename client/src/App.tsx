@@ -266,7 +266,8 @@ const GRAMMAR_DATA = [
         title: "Partial Negation",
         items: [
           "～わけではない (doesn’t necessarily mean…)",
-          "～とは限らない (not always…)"
+          "～とは限らない (not always…)",
+          "～からといって (just because...)"
         ]
       },
       {
@@ -283,7 +284,8 @@ const GRAMMAR_DATA = [
         items: [
           "～ことが多い (often happens)",
           "～ような気がする (have a feeling that)",
-          "～と言われている (it is said that)"
+          "～と言われている (it is said that)",
+          "～てばかりいる (doing nothing but...)"
         ]
       },
       {
