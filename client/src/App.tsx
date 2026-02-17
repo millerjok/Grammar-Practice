@@ -159,7 +159,8 @@ const GRAMMAR_DATA = [
           "～のに (although)",
           "～だけ (only)",
           "～しか～ない (only [negative])",
-          "～ほかに (in addition to/except for)"
+          "～ほかに (in addition to/except for)",
+          "～として (as... / in the role of...)"
         ]
       },
       {
