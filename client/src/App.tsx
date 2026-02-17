@@ -84,7 +84,9 @@ const GRAMMAR_DATA = [
         items: [
           "～と思う (I think)",
           "～でしょう (probably)",
-          "～かもしれない (maybe)"
+          "～かもしれない (maybe)",
+          "～みたいだ (looks like)",
+          "～ようだ (seems like)"
         ]
       }
     ]
