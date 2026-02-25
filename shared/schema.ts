@@ -1,18 +1,28 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+export const questionSchema = z.object({
+  id: z.number(),
+  english: z.string(),
+  japanese: z.string(),
+  kana: z.string(),
+  romaji: z.string(),
+  tip: z.string(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export const grammarDataSchema = z.object({
+  usage: z.string(),
+  exercises: z.array(questionSchema),
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export const grammarLevelSchema = z.object({
+  level: z.string(),
+  description: z.string(),
+  sections: z.array(z.object({
+    title: z.string(),
+    items: z.array(z.string()),
+  })),
+});
+
+export type Question = z.infer<typeof questionSchema>;
+export type GrammarData = z.infer<typeof grammarDataSchema>;
+export type GrammarLevel = z.infer<typeof grammarLevelSchema>;

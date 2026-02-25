@@ -7,304 +7,22 @@ import {
   RefreshCw, 
   Eye, 
   EyeOff, 
-  Sparkles,
   School,
   Printer,
   Copy,
   Sun,
   Moon
 } from 'lucide-react';
-import { grammarQuestions } from "./data/grammarQuestions";
+import type { GrammarLevel, GrammarData, Question } from '@shared/schema';
 
-// --- Configuration & Data ---
-
-// Use environment variable or fallback to empty string
-// You can set this in the Secrets tool as VITE_GEMINI_API_KEY
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || ""; 
-
-// Kanji to highlight
 const TARGET_KANJI = "一二三四五六七八九十百千万本人回才円番春夏秋冬日月火水木金土曜年時分夕半午毎週間今先朝晩昼夜去目口耳手体上中下右左前後東西南北外学校英語文漢字勉強父母子家族兄弟姉妹友私男女大小好安高新古多少楽長近正広早明行来休出入生見思書言話読売買食飲知作住会使着発聞帰持待教乗働動歩終始泊洗立考習山川田島花海天雨雪牛魚馬犬京都市県州国町神寺駅店電車道旅赤青白黒色銀々何紙元気活社自物名方院所屋肉場飯洋和病次同仕事点";
 
-const GRAMMAR_DATA = [
-  {
-    level: "Level 1",
-    description: "Foundational Grammar",
-    color: "bg-red-900/30 border-red-800/50",
-    textDark: "text-red-200",
-    textLight: "text-red-700",
-    sections: [
-      {
-        title: "Basic Actions & Requests",
-        items: [
-          "～ましょう (let’s)",
-          "～てください (please do)",
-          "～ている (ongoing action/state)"
-        ]
-      },
-      {
-        title: "Time & Sequence",
-        items: [
-          "～とき (when...)",
-          "～前に (before...)",
-          "～てから (after)",
-          "～た後で (after doing…)",
-          "～ながら (while)"
-        ]
-      },
-      {
-        title: "Reason, Purpose & Conjunctions",
-        items: [
-          "～から (because - subjective)",
-          "～ので (because - objective)",
-          "～が (but)",
-          "～けど／けれど／けれども (but - casual/polite)",
-          "～ても／でも (even if)",
-          "Place へ Verb Stem に行く・来る (purpose)"
-        ]
-      },
-      {
-        title: "Ability, Preference & Definition",
-        items: [
-          "～ことができる (can do)",
-          "～が好き／きらい／上手／下手 (likes/dislikes/skills)",
-          "～について (about)",
-          "～という (called/that says)"
-        ]
-      },
-      {
-        title: "Desire & Intention",
-        items: [
-          "～たい (want to do)",
-          "～がほしい (want - object)",
-          "～てほしい (want someone to…)",
-          "～つもりだ (intend to)"
-        ]
-      },
-      {
-        title: "Probability / Guess",
-        items: [
-          "～と思う (I think)",
-          "～でしょう (probably)",
-          "～かもしれない (maybe)",
-          "～みたいだ (looks like)",
-          "～ようだ (seems like)"
-        ]
-      }
-    ]
-  },
-  {
-    level: "Level 2",
-    description: "Common & Essential Grammar",
-    color: "bg-blue-900/30 border-blue-800/50",
-    textDark: "text-blue-200",
-    textLight: "text-blue-700",
-    sections: [
-      {
-        title: "Essential Conditionals",
-        items: [
-          "～たら (if/when…)",
-          "～と (natural consequence)",
-          "～ば (if…)",
-          "～なら (if [contextual]…)"
-        ]
-      },
-      {
-        title: "Hearsay & Conjecture",
-        items: [
-          "～によると…～そうだ (According to… I heard)",
-          "～らしい (apparently)",
-          "～ようだ／みたいだ (seems / looks like)"
-        ]
-      },
-      {
-        title: "Ease, Excess & Methods",
-        items: [
-          "～やすい／にくい (easy to/hard to)",
-          "～すぎる (too much)",
-          "～方 (way of doing)"
-        ]
-      },
-      {
-        title: "Change & Completion",
-        items: [
-          "～ようになる (become able to / habit)",
-          "い-adj → ～くなる / な-adj → ～になる (to become…)",
-          "～てしまう (completely/regret)"
-        ]
-      },
-      {
-        title: "Requests, Advice & Obligations",
-        items: [
-          "～てもいい (may)",
-          "～てはいけない (must not)",
-          "～なければならない / ～なければいけない (must)",
-          "～なくてもいい (don't have to)",
-          "～た・ないほうがいい (had better/better not)",
-          "～てはだめだ (must not - casual)"
-        ]
-      },
-      {
-        title: "Experiences & Giving",
-        items: [
-          "～たことがある (have done before)",
-          "～てみる (try)",
-          "～てあげる／くれる／もらう (giving/receiving favors)"
-        ]
-      },
-      {
-        title: "Comparison, Contrast & Limits",
-        items: [
-          "AよりBのほうが… (B is more… than A)",
-          "AはBほど～ない (A is not as… as B)",
-          "～の中で一番… (the most… among)",
-          "～のに (although)",
-          "～だけ (only)",
-          "～しか～ない (only [negative])",
-          "～ほかに (in addition to/except for)",
-          "～として (as... / in the role of...)"
-        ]
-      },
-      {
-        title: "Sequence & Listing",
-        items: [
-          "～たり～たりする (listing)",
-          "～し～し (reasons/items)"
-        ]
-      },
-      {
-        title: "Nominalisation",
-        items: [
-          "こと／の (nominaliser)"
-        ]
-      },
-      {
-        title: "Intention",
-        items: [
-          "～（よう）と思う (I think I will…)"
-        ]
-      },
-      {
-        title: "Ability & Potential",
-        items: [
-          "Verb (Potential Form) (can do)"
-        ]
-      }
-    ]
-  },
-  {
-    level: "Level 3",
-    description: "Advanced Connectors & Nuance",
-    color: "bg-emerald-900/30 border-emerald-800/50",
-    textDark: "text-emerald-200",
-    textLight: "text-emerald-700",
-    sections: [
-      {
-        title: "Time & Timing",
-        items: [
-          "～うちに (before change / while)",
-          "～間に (during / while)",
-          "～ところ (when/about to do)"
-        ]
-      },
-      {
-        title: "Purpose, Decisions & Logic",
-        items: [
-          "～ために (in order to)",
-          "～ように (so that / purpose)",
-          "～ことにする (I decide to…)",
-          "～ことになる (it has been decided…)",
-          "～わけだ (that’s why / means…)"
-        ]
-      },
-      {
-        title: "Advanced Relations",
-        items: [
-          "～だけでなく／～ばかりでなく (not only..., but also...)",
-          "～に比べて… (compared to…)",
-          "～かわりに (instead of…)",
-          "～にとって (for/to…)"
-        ]
-      },
-      {
-        title: "Complex Causes",
-        items: [
-          "～せいで (because, negative)",
-          "～おかげで (thanks to)",
-          "～結果（けっか） (as a result)"
-        ]
-      },
-      {
-        title: "Expectation & Necessity",
-        items: [
-          "～はずだ／はずがない (expected to/cannot be)",
-          "～べきだ／べきではない (should/should not)",
-          "～必要がある (necessary to)",
-          "～ことをおすすめします (I recommend…)"
-        ]
-      },
-      {
-        title: "Nuance & Uncertainty",
-        items: [
-          "～かどうか (whether or not)",
-          "～ばかり (nothing but)"
-        ]
-      }
-    ]
-  },
-  {
-    level: "Level 4",
-    description: "Idioms & Advanced Phrasing",
-    color: "bg-violet-900/30 border-violet-800/50",
-    textDark: "text-violet-200",
-    textLight: "text-violet-700",
-    sections: [
-      {
-        title: "Passive / Causative (Core VCE)",
-        items: [
-          "受け身：Vられる (Passive)",
-          "使役：Vせる／させる (Causative)",
-          "使役受け身：～させられる (Causative Passive)"
-        ]
-      },
-      {
-        title: "Partial Negation",
-        items: [
-          "～わけではない (doesn’t necessarily mean…)",
-          "～とはかぎらない (not necessarily…)",
-          "～からといって (just because...)"
-        ]
-      },
-      {
-        title: "Formal / Academic Grammar",
-        items: [
-          "～によって (depending on)",
-          "～に対して (towards/contrasting)",
-          "～から見ると (from the perspective of…)",
-          "おもに (mainly/primarily)"
-        ]
-      },
-      {
-        title: "Idiomatic / Natural Expressions",
-        items: [
-          "～ことが多い (often happens)",
-          "～ような気がする (have a feeling that)",
-          "～と言われている (it is said that)",
-          "～てばかりいる (doing nothing but...)"
-        ]
-      },
-      {
-        title: "Advanced Phrasing",
-        items: [
-          "～ば～ほど (the more… the more)",
-          "と言っても過言ではない (it's no exaggeration to say that)",
-          "～ことで、…できる (by doing…, one can…)"
-        ]
-      }
-    ]
-  }
-];
-
-// --- Components ---
+const LEVEL_STYLES: Record<string, { color: string; textDark: string; textLight: string }> = {
+  "Level 1": { color: "bg-red-900/30 border-red-800/50", textDark: "text-red-200", textLight: "text-red-700" },
+  "Level 2": { color: "bg-blue-900/30 border-blue-800/50", textDark: "text-blue-200", textLight: "text-blue-700" },
+  "Level 3": { color: "bg-emerald-900/30 border-emerald-800/50", textDark: "text-emerald-200", textLight: "text-emerald-700" },
+  "Level 4": { color: "bg-violet-900/30 border-violet-800/50", textDark: "text-violet-200", textLight: "text-violet-700" },
+};
 
 const HighlightKanji = ({ text }: { text: string }) => {
   if (!text) return null;
@@ -333,11 +51,12 @@ const Header = ({ theme, toggleTheme }: { theme: 'dark' | 'light', toggleTheme: 
           <School size={24} />
         </div>
         <div>
-          <h1 className={`text-xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Japanese Grammar</h1>
+          <h1 data-testid="text-app-title" className={`text-xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Japanese Grammar</h1>
           <p className="text-xs text-slate-400 font-medium tracking-wide">Chiaki Education</p>
         </div>
       </div>
       <button
+        data-testid="button-toggle-theme"
         onClick={toggleTheme}
         className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
         aria-label="Toggle theme"
@@ -348,14 +67,16 @@ const Header = ({ theme, toggleTheme }: { theme: 'dark' | 'light', toggleTheme: 
   </header>
 );
 
-const LevelCard = ({ level, onSelect, theme }: { level: any, onSelect: any, theme: 'dark' | 'light' }) => {
+const LevelCard = ({ level, onSelect, theme }: { level: GrammarLevel, onSelect: (item: string, levelName: string) => void, theme: 'dark' | 'light' }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const style = LEVEL_STYLES[level.level] || LEVEL_STYLES["Level 1"];
 
   return (
     <div className="mb-4">
       <button 
+        data-testid={`button-level-${level.level}`}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full text-left p-4 flex justify-between items-center border transition-all duration-200 cursor-pointer ${level.color} ${theme === 'dark' ? level.textDark : level.textLight} ${isOpen ? 'rounded-t-xl border-b-0' : 'rounded-xl hover:brightness-110'}`}
+        className={`w-full text-left p-4 flex justify-between items-center border transition-all duration-200 cursor-pointer ${style.color} ${theme === 'dark' ? style.textDark : style.textLight} ${isOpen ? 'rounded-t-xl border-b-0' : 'rounded-xl hover:brightness-110'}`}
       >
         <div>
           <h2 className="text-xl font-bold">{level.level}</h2>
@@ -369,7 +90,7 @@ const LevelCard = ({ level, onSelect, theme }: { level: any, onSelect: any, them
 
       {isOpen && (
         <div className={`${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} border rounded-b-xl shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200`}>
-          {level.sections.map((section: any, idx: number) => (
+          {level.sections.map((section, idx) => (
             <div key={idx} className={`border-b last:border-0 ${theme === 'dark' ? 'border-slate-700' : 'border-slate-100'}`}>
               {section.title !== "Core Expressions" && section.title !== "Basic Actions & Requests" && (
                 <div className={`px-6 py-2 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'bg-slate-900/50 text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
@@ -380,6 +101,7 @@ const LevelCard = ({ level, onSelect, theme }: { level: any, onSelect: any, them
                 {section.items.map((item: string, i: number) => (
                   <button
                     key={i}
+                    data-testid={`button-grammar-${item}`}
                     onClick={() => onSelect(item, level.level)}
                     className={`text-left px-6 py-4 transition-colors duration-200 border-r last:border-r-0 flex items-center justify-between group cursor-pointer ${theme === 'dark' ? 'hover:bg-slate-700 border-slate-700' : 'hover:bg-slate-50 border-slate-100'}`}
                   >
@@ -396,13 +118,13 @@ const LevelCard = ({ level, onSelect, theme }: { level: any, onSelect: any, them
   );
 };
 
-const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: any, level: any, onBack: any, theme: 'dark' | 'light' }) => {
-  const [questions, setQuestions] = useState<any[]>([]);
+const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: string, level: string, onBack: () => void, theme: 'dark' | 'light' }) => {
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [usage, setUsage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAllAnswers, setShowAllAnswers] = useState(false);
-  const [revealedIds, setRevealedIds] = useState(new Set());
+  const [revealedIds, setRevealedIds] = useState(new Set<number>());
 
   const generateQuestions = async () => {
     setLoading(true);
@@ -413,20 +135,21 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
     setShowAllAnswers(false);
 
     try {
-      // Simulate network request for UX (optional, but gives a nice loading state)
-      await new Promise(resolve => setTimeout(resolve, 600));
-
-      const data = grammarQuestions[grammarPoint] || grammarQuestions["default"];
+      const response = await fetch(`/api/grammar/questions/${encodeURIComponent(grammarPoint)}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch questions from server");
+      }
+      const data: GrammarData = await response.json();
       
       if (data && data.exercises) {
         setQuestions(data.exercises);
         setUsage(data.usage);
       } else {
-        throw new Error("Invalid format received from local data");
+        throw new Error("Invalid format received from server");
       }
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Failed to load questions. Please check data file.");
+      setError(err.message || "Failed to load questions. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -436,7 +159,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
     generateQuestions();
   }, [grammarPoint]);
 
-  const toggleReveal = (id: any) => {
+  const toggleReveal = (id: number) => {
     const newSet = new Set(revealedIds);
     if (newSet.has(id)) {
       newSet.delete(id);
@@ -481,7 +204,6 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Print-only View */}
       <div className="print-only">
         <div className="mb-8">
           <div className="flex justify-between items-end border-b-2 border-black pb-4 mb-6">
@@ -519,7 +241,6 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
           </div>
         </div>
 
-        {/* Answer Key Page */}
         <div className="print-break-before">
           <div className="flex justify-between items-end border-b-2 border-black pb-4 mb-6">
             <h1 className="text-2xl font-bold">Answer Key</h1>
@@ -547,8 +268,8 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
         </div>
       </div>
 
-      {/* Screen View Navigation & Header */}
       <button 
+        data-testid="button-back"
         onClick={onBack} 
         className={`flex items-center mb-6 transition-colors no-print ${theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
       >
@@ -561,13 +282,12 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
         <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider mb-3 ${theme === 'dark' ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
           {level}
         </span>
-        <h2 className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>{grammarPoint}</h2>
+        <h2 data-testid="text-grammar-point" className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>{grammarPoint}</h2>
         
-        {/* Usage Display */}
         <div className="min-h-[2rem] mb-3 flex justify-center">
            {usage ? (
              <div className={`inline-block px-4 py-2 rounded-lg border backdrop-blur-sm shadow-inner ${theme === 'dark' ? 'bg-slate-900/50 border-slate-600' : 'bg-slate-50 border-slate-200'}`}>
-               <span className={`font-mono text-sm font-medium tracking-wide ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600'}`}>{usage}</span>
+               <span data-testid="text-usage" className={`font-mono text-sm font-medium tracking-wide ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600'}`}>{usage}</span>
              </div>
            ) : loading ? (
              <div className={`h-8 w-64 rounded-lg animate-pulse ${theme === 'dark' ? 'bg-slate-700/50' : 'bg-slate-200'}`}></div>
@@ -577,12 +297,12 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
         <p className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Translate the sentences below into Japanese.</p>
       </div>
 
-      {/* Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 no-print">
         <div className="flex items-center space-x-2">
         </div>
         <div className="flex space-x-3">
           <button 
+            data-testid="button-print"
             onClick={handlePrint}
             disabled={loading || !!error || questions.length === 0}
             className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50 ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
@@ -591,6 +311,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
             Print Worksheet
           </button>
           <button 
+            data-testid="button-copy"
             onClick={handleCopy}
             disabled={loading || !!error || questions.length === 0}
             className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50 ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
@@ -599,6 +320,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
             Copy Questions
           </button>
           <button 
+            data-testid="button-toggle-all"
             onClick={toggleAll}
             disabled={loading || !!error}
             className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
@@ -607,6 +329,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
             {showAllAnswers ? "Hide All" : "Show All"}
           </button>
           <button 
+            data-testid="button-regenerate"
             onClick={() => generateQuestions()}
             disabled={loading}
             className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm disabled:opacity-50"
@@ -617,7 +340,6 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
         </div>
       </div>
 
-      {/* Content Area */}
       {loading ? (
         <div className="space-y-4 animate-pulse no-print">
           {[...Array(5)].map((_, i) => (
@@ -626,8 +348,9 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
         </div>
       ) : error ? (
         <div className={`text-center py-12 rounded-xl border no-print ${theme === 'dark' ? 'bg-red-900/20 border-red-800/50' : 'bg-red-50 border-red-200'}`}>
-          <p className={`mb-4 ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>{error}</p>
+          <p data-testid="text-error" className={`mb-4 ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>{error}</p>
           <button 
+            data-testid="button-try-again"
             onClick={() => generateQuestions()}
             className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
           >
@@ -641,6 +364,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
             return (
               <div 
                 key={q.id} 
+                data-testid={`card-question-${q.id}`}
                 onClick={() => toggleReveal(q.id)}
                 className={`rounded-xl border p-6 cursor-pointer transition-all duration-200 group ${
                   theme === 'dark' 
@@ -686,12 +410,25 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
   );
 };
 
-// --- Main App ---
-
 export default function App() {
+  const [grammarLevels, setGrammarLevels] = useState<GrammarLevel[]>([]);
+  const [levelsLoading, setLevelsLoading] = useState(true);
   const [selectedGrammar, setSelectedGrammar] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  useEffect(() => {
+    fetch('/api/grammar/levels')
+      .then(res => res.json())
+      .then(data => {
+        setGrammarLevels(data);
+        setLevelsLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load grammar levels:', err);
+        setLevelsLoading(false);
+      });
+  }, []);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
@@ -720,11 +457,18 @@ export default function App() {
               <p className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Choose a topic below to generate practice exercises.</p>
             </div>
             
-            {GRAMMAR_DATA.map((level, idx) => (
-              <LevelCard key={idx} level={level} onSelect={handleSelect} theme={theme} />
-            ))}
+            {levelsLoading ? (
+              <div className="space-y-4 animate-pulse">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className={`h-20 rounded-xl border ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}></div>
+                ))}
+              </div>
+            ) : (
+              grammarLevels.map((level, idx) => (
+                <LevelCard key={idx} level={level} onSelect={handleSelect} theme={theme} />
+              ))
+            )}
             
-            {/* Footer / Instructions */}
             <div className="mt-12 text-center text-sm text-slate-600 pb-8">
               <p>Vocabulary Limited to Japanese Beginners for Practice Clarity</p>
               <p className="mt-2">For troubleshooting, please email: soullennon41@gmail.com</p>
@@ -733,7 +477,7 @@ export default function App() {
         ) : (
           <PracticeView 
             grammarPoint={selectedGrammar} 
-            level={selectedLevel} 
+            level={selectedLevel!} 
             onBack={handleBack} 
             theme={theme}
           />
