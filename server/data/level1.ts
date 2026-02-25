@@ -158,7 +158,7 @@ export const level1Questions: Record<string, GrammarData> = {
       { id: 5, english: "I couldn't sleep yesterday.", japanese: "昨日は寝ることができませんでした。", kana: "きのうはねることができませんでした。", romaji: "Kinou wa neru koto ga dekimasen deshita.", tip: "Past negative." }
     ]
   },
-  "～が好き／きらい／上手／下手 (likes/dislikes/skills)": {
+  "～ことが好き／きらい／上手／下手 だ": {
     usage: "Noun + が + 好き/嫌い/上手/下手",
     exercises: [
       { id: 1, english: "I like dogs.", japanese: "私は犬が好きです。", kana: "わたしはいぬがすきです。", romaji: "Watashi wa inu ga suki desu.", tip: "Use the particle が with 好き." },

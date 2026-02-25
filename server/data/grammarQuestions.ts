@@ -88,7 +88,7 @@ export const grammarQuestions: Record<string, GrammarData> = {
       { id: 3, english: "Can you ride a bicycle?", japanese: "自転車に乗ることができますか。", kana: "じてんしゃにのることができますか。", romaji: "Jitensha ni noru koto ga dekimasu ka.", tip: "Dictionary form of 乗る (to ride)." }
     ]
   },
-  "～が好き／きらい／上手／下手 (likes/dislikes/skills)": {
+  "～ことが好き／きらい／上手／下手 だ": {
     usage: "Noun + が + 好き/嫌い/上手/下手",
     exercises: [
       { id: 1, english: "I like dogs.", japanese: "私は犬が好きです。", kana: "わたしはいぬがすきです。", romaji: "Watashi wa inu ga suki desu.", tip: "Use the particle が with 好き." },

@@ -38,7 +38,7 @@ export const grammarLevels: GrammarLevel[] = [
         title: "Ability, Preference & Definition",
         items: [
           "～ことができる (can do)",
-          "～が好き／きらい／上手／下手 (likes/dislikes/skills)",
+          "～ことが好き／きらい／上手／下手 だ",
           "～について (about)",
           "～という (called/that says)"
         ]
