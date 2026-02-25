@@ -89,11 +89,11 @@ export const grammarQuestions: Record<string, GrammarData> = {
     ]
   },
   "～ことが好き／きらい／上手／下手 だ": {
-    usage: "Noun + が + 好き/嫌い/上手/下手",
+    usage: "Verb (dictionary form) + ことが + 好きだ/嫌いだ/上手だ/下手だ",
     exercises: [
-      { id: 1, english: "I like dogs.", japanese: "私は犬が好きです。", kana: "わたしはいぬがすきです。", romaji: "Watashi wa inu ga suki desu.", tip: "Use the particle が with 好き." },
-      { id: 2, english: "He is good at tennis.", japanese: "彼はテニスが上手です。", kana: "かれはてにすがじょうずです。", romaji: "Kare wa tenisu ga jouzu desu.", tip: "Use the particle が with 上手 (good at)." },
-      { id: 3, english: "I dislike fish.", japanese: "私は魚が嫌いです。", kana: "わたしはさかながきらいです。", romaji: "Watashi wa sakana ga kirai desu.", tip: "嫌い (kirai) means to dislike." }
+      { id: 1, english: "I like reading books.", japanese: "私は本を読むことが好きです。", kana: "わたしはほんをよむことがすきです。", romaji: "Watashi wa hon o yomu koto ga suki desu.", tip: "Verb dictionary form + ことが好き turns the verb into a noun phrase." },
+      { id: 2, english: "He is good at cooking.", japanese: "彼は料理を作ることが上手です。", kana: "かれはりょうりをつくることがじょうずです。", romaji: "Kare wa ryouri o tsukuru koto ga jouzu desu.", tip: "こと nominalises the verb so it can pair with 上手." },
+      { id: 3, english: "I dislike waking up early.", japanese: "私は早く起きることが嫌いです。", kana: "わたしははやくおきることがきらいです。", romaji: "Watashi wa hayaku okiru koto ga kirai desu.", tip: "嫌い (kirai) expresses dislike for an activity." }
     ]
   },
 

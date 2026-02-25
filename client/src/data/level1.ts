@@ -159,13 +159,13 @@ export const level1Questions: Record<string, GrammarData> = {
     ]
   },
   "～ことが好き／きらい／上手／下手 だ": {
-    usage: "Noun + が + 好き/嫌い/上手/下手",
+    usage: "Verb (dictionary form) + ことが + 好きだ/嫌いだ/上手だ/下手だ",
     exercises: [
-      { id: 1, english: "I like dogs.", japanese: "私は犬が好きです。", kana: "わたしはいぬがすきです。", romaji: "Watashi wa inu ga suki desu.", tip: "Use the particle が with 好き." },
-      { id: 2, english: "He is good at tennis.", japanese: "彼はテニスが上手です。", kana: "かれはてにすがじょうずです。", romaji: "Kare wa tenisu ga jouzu desu.", tip: "Use the particle が with 上手 (good at)." },
-      { id: 3, english: "I dislike fish.", japanese: "私は魚が嫌いです。", kana: "わたしはさかながきらいです。", romaji: "Watashi wa sakana ga kirai desu.", tip: "嫌い (kirai) means to dislike." },
-      { id: 4, english: "My mother is bad at singing.", japanese: "母は歌が下手です。", kana: "はははうたがへたです。", romaji: "Haha wa uta ga heta desu.", tip: "下手 (heta) means bad at." },
-      { id: 5, english: "I don't like vegetables very much.", japanese: "野菜はあまり好きじゃありません。", kana: "やさいはあまりすきじゃありません。", romaji: "Yasai wa amari suki ja arimasen.", tip: "Negative preference." }
+      { id: 1, english: "I like reading books.", japanese: "私は本を読むことが好きです。", kana: "わたしはほんをよむことがすきです。", romaji: "Watashi wa hon o yomu koto ga suki desu.", tip: "Verb dictionary form + ことが好き turns the verb into a noun phrase." },
+      { id: 2, english: "He is good at cooking.", japanese: "彼は料理を作ることが上手です。", kana: "かれはりょうりをつくることがじょうずです。", romaji: "Kare wa ryouri o tsukuru koto ga jouzu desu.", tip: "こと nominalises the verb so it can pair with 上手." },
+      { id: 3, english: "I dislike waking up early.", japanese: "私は早く起きることが嫌いです。", kana: "わたしははやくおきることがきらいです。", romaji: "Watashi wa hayaku okiru koto ga kirai desu.", tip: "嫌い (kirai) expresses dislike for an activity." },
+      { id: 4, english: "My younger brother is bad at writing kanji.", japanese: "弟は漢字を書くことが下手です。", kana: "おとうとはかんじをかくことがへたです。", romaji: "Otouto wa kanji o kaku koto ga heta desu.", tip: "下手 (heta) means unskilled at doing something." },
+      { id: 5, english: "I like listening to music.", japanese: "私は音楽を聞くことが好きです。", kana: "わたしはおんがくをきくことがすきです。", romaji: "Watashi wa ongaku o kiku koto ga suki desu.", tip: "聞く (to listen) + ことが好き." }
     ]
   },
   "～について (about)": {
