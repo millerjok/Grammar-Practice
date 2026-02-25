@@ -1,16 +1,7 @@
-export interface Question {
-  id: number;
-  english: string;
-  japanese: string;
-  kana: string;
-  romaji: string;
-  tip: string;
-}
-
-export interface GrammarData {
-  usage: string;
-  exercises: Question[];
-}
+import { Question, GrammarData } from './types';
+import { level2Questions } from './level2';
+import { level3Questions } from './level3';
+import { level4Questions } from './level4';
 
 export const grammarQuestions: Record<string, GrammarData> = {
   // Level 1: Basic Actions & Requests
@@ -188,6 +179,10 @@ export const grammarQuestions: Record<string, GrammarData> = {
       { id: 3, english: "I don't necessarily know everything.", japanese: "全部知っているわけではない。", kana: "ぜんぶしっているわけではない。", romaji: "Zenbu shitte iru wake dewa nai.", tip: "Softening a statement." }
     ]
   },
+
+  ...level2Questions,
+  ...level3Questions,
+  ...level4Questions,
 
   "default": {
     usage: "Pre-set questions not yet added for this grammar point.",
