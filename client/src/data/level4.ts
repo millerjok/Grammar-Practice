@@ -160,7 +160,7 @@ export const level4Questions: Record<string, GrammarData> = {
       { id: 5, english: "The more I practice, the better I get.", japanese: "練習すれば練習するほど、上手になります。", kana: "れんしゅうすればれんしゅうするほど、じょうずになります。", romaji: "Renshuu sureba renshuu suru hodo, jouzu ni narimasu.", tip: "Group 3 verb する." }
     ]
   },
-  "と言っても過言ではない (it's no exaggeration to say that)": {
+  "と言っても過言ではない (it’s no exaggeration to say that)": {
     usage: "Sentence + と言っても過言ではない",
     exercises: [
       { id: 1, english: "It's no exaggeration to say it's the best.", japanese: "一番いいと言っても過言ではありません。", kana: "いちばんいいといってもかごんではありません。", romaji: "Ichiban ii to itte mo kagon dewa arimasen.", tip: "Emphasizes a strong point." },

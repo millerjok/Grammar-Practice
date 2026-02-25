@@ -8,7 +8,7 @@ export const grammarLevels: GrammarLevel[] = [
       {
         title: "Basic Actions & Requests",
         items: [
-          "～ましょう (let's)",
+          "～ましょう (let’s)",
           "～てください (please do)",
           "～ている (ongoing action/state)"
         ]
@@ -107,7 +107,7 @@ export const grammarLevels: GrammarLevel[] = [
           "～てもいい (may)",
           "～てはいけない (must not)",
           "～なければならない / ～なければいけない (must)",
-          "～なくてもいい (don't have to)",
+          "～なくてもいい (don’t have to)",
           "～た・ないほうがいい (had better/better not)",
           "～てはだめだ (must not - casual)"
         ]
@@ -179,7 +179,7 @@ export const grammarLevels: GrammarLevel[] = [
           "～ように (so that / purpose)",
           "～ことにする (I decide to…)",
           "～ことになる (it has been decided…)",
-          "～わけだ (that's why / means…)"
+          "～わけだ (that’s why / means…)"
         ]
       },
       {
@@ -232,7 +232,7 @@ export const grammarLevels: GrammarLevel[] = [
       {
         title: "Partial Negation",
         items: [
-          "～わけではない (doesn't necessarily mean…)",
+          "～わけではない (doesn’t necessarily mean…)",
           "～とはかぎらない (not necessarily…)",
           "～からといって (just because...)"
         ]
@@ -259,7 +259,7 @@ export const grammarLevels: GrammarLevel[] = [
         title: "Advanced Phrasing",
         items: [
           "～ば～ほど (the more… the more)",
-          "と言っても過言ではない (it's no exaggeration to say that)",
+          "と言っても過言ではない (it’s no exaggeration to say that)",
           "～ことで、…できる (by doing…, one can…)"
         ]
       }

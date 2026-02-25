@@ -170,7 +170,7 @@ export const level2Questions: Record<string, GrammarData> = {
       { id: 5, english: "I must memorize kanji.", japanese: "漢字を覚えなければいけません。", kana: "かんじをおぼえなければいけません。", romaji: "Kanji o oboenakereba ikemasen.", tip: "Oboeru becomes Oboenai." }
     ]
   },
-  "～なくてもいい (don't have to)": {
+  "～なくてもいい (don’t have to)": {
     usage: "Verb (nai-form, drop i) + くてもいいです",
     exercises: [
       { id: 1, english: "You don't have to hurry.", japanese: "急がなくてもいいですよ。", kana: "いそがなくてもいいですよ。", romaji: "Isoganakute mo ii desu yo.", tip: "Lack of obligation." },
