@@ -14,6 +14,7 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
+import { grammarQuestions } from "./data/grammarQuestions";
 
 // --- Configuration & Data ---
 
@@ -403,7 +404,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
   const [showAllAnswers, setShowAllAnswers] = useState(false);
   const [revealedIds, setRevealedIds] = useState(new Set());
 
-  const generateQuestions = async (retryCount = 0) => {
+  const generateQuestions = async () => {
     setLoading(true);
     setError(null);
     setQuestions([]);
@@ -412,69 +413,20 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: an
     setShowAllAnswers(false);
 
     try {
-      if (!apiKey) {
-        throw new Error("API Key is missing. Please add VITE_GEMINI_API_KEY to your secrets.");
-      }
+      // Simulate network request for UX (optional, but gives a nice loading state)
+      await new Promise(resolve => setTimeout(resolve, 600));
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: `You are an expert Japanese teacher. Create a JSON response containing a usage rule and 10 translation exercises (English to Japanese) specifically practicing the grammar point: "${grammarPoint}".
-                
-                STRICT CONSTRAINTS:
-                1. Vocabulary MUST be limited to JLPT N5 and N4 levels (VCE SL Japanese level). Do not use advanced nouns or verbs.
-                2. The focus is on the correct usage of the grammar structure.
-                3. The "usage" field MUST be a brief explanation in ENGLISH (e.g. "Verb (te-form) + しまう"). Do not use Japanese for the explanation text.
-                4. If the grammar point title specifies a word order (e.g. "Place へ Verb Stem に..."), the Japanese sentences MUST strictly follow that order.
-                5. The output must be valid JSON.
-                
-                Output Schema:
-                {
-                  "usage": "The grammar formation rule in English (e.g., Verb (te-form) + しまう)",
-                  "exercises": [
-                    {
-                      "id": 1,
-                      "english": "English sentence here",
-                      "japanese": "Japanese sentence with Kanji",
-                      "kana": "Reading in Hiragana/Katakana",
-                      "romaji": "Romaji reading",
-                      "tip": "Brief grammar note explaining the usage in this context"
-                    }
-                  ]
-                }`
-              }]
-            }]
-          })
-        }
-      );
-
-      if (!response.ok) throw new Error("API call failed. Check your API key.");
-
-      const data = await response.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const data = grammarQuestions[grammarPoint] || grammarQuestions["default"];
       
-      // Clean up markdown code blocks if present
-      const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(jsonStr);
-      
-      if (parsed.exercises && Array.isArray(parsed.exercises)) {
-        setQuestions(parsed.exercises);
-        if (parsed.usage) setUsage(parsed.usage);
+      if (data && data.exercises) {
+        setQuestions(data.exercises);
+        setUsage(data.usage);
       } else {
-        throw new Error("Invalid format received");
+        throw new Error("Invalid format received from local data");
       }
     } catch (err: any) {
       console.error(err);
-      if (retryCount < 2 && apiKey) {
-        setTimeout(() => generateQuestions(retryCount + 1), 1500);
-      } else {
-        setError(err.message || "Failed to generate questions. Please try again.");
-      }
+      setError(err.message || "Failed to load questions. Please check data file.");
     } finally {
       setLoading(false);
     }
