@@ -10,6 +10,28 @@ import runApp from "./app";
 
 import viteConfig from "../vite.config";
 
+process.on("SIGHUP", () => {
+  console.log("Received SIGHUP, ignoring to keep server alive");
+});
+
+process.on("SIGTERM", () => {
+  console.log("Received SIGTERM, shutting down gracefully");
+  process.exit(0);
+});
+
+process.on("SIGINT", () => {
+  console.log("Received SIGINT, shutting down gracefully");
+  process.exit(0);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught exception:", err);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled rejection:", reason);
+});
+
 const viteLogger = createLogger();
 
 export async function setupVite(app: Express, server: Server) {
@@ -26,7 +48,6 @@ export async function setupVite(app: Express, server: Server) {
       ...viteLogger,
       error: (msg, options) => {
         viteLogger.error(msg, options);
-        process.exit(1);
       },
     },
     server: serverOptions,

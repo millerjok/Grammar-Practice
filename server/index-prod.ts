@@ -6,6 +6,28 @@ import express, { type Express, type Request } from "express";
 
 import runApp from "./app";
 
+process.on("SIGHUP", () => {
+  console.log("Received SIGHUP, ignoring to keep server alive");
+});
+
+process.on("SIGTERM", () => {
+  console.log("Received SIGTERM, shutting down gracefully");
+  process.exit(0);
+});
+
+process.on("SIGINT", () => {
+  console.log("Received SIGINT, shutting down gracefully");
+  process.exit(0);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught exception:", err);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled rejection:", reason);
+});
+
 export async function serveStatic(app: Express, server: Server) {
   const distPath = path.resolve(import.meta.dirname, "public");
 
