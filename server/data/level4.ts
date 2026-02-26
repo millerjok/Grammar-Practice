@@ -151,13 +151,13 @@ export const level4Questions: Record<string, GrammarData> = {
 
   // Advanced Phrasing
   "～ば～ほど (the more… the more)": {
-    usage: "Verb(ba form) + Verb(dict) + ほど / Adj(kereba) + Adj(i) + ほど",
+    usage: "Verb(ば form) + Verb(dict) + ほど / i-Adj(ければ) + i-Adj + ほど / Noun・na-Adj + なら + ば",
     exercises: [
-      { id: 1, english: "The more I study, the more interesting it gets.", japanese: "勉強すれば勉強するほど、面白くなります。", kana: "べんきょうすればべんきょうするほど、おもしろくなります。", romaji: "Benkyou sureba benkyou suru hodo, omoshiroku narimasu.", tip: "The verb is repeated in ba-form and dictionary form." },
-      { id: 2, english: "The cheaper it is, the better.", japanese: "安ければ安いほどいいです。", kana: "やすければやすいほどいいです。", romaji: "Yasukereba yasui hodo ii desu.", tip: "I-adjectives repeat the stem." },
-      { id: 3, english: "The more you read, the more you understand.", japanese: "読めば読むほど、わかります。", kana: "よめばよむほど、わかります。", romaji: "Yomeba yomu hodo, wakarimasu.", tip: "Verb 読む becomes 読めば 読むほど." },
-      { id: 4, english: "The more convenient, the better.", japanese: "便利なら便利なほどいいです。", kana: "べんりならべんりなほどいいです。", romaji: "Benri nara benri na hodo ii desu.", tip: "Na-adj uses なら." },
-      { id: 5, english: "The more I practice, the better I get.", japanese: "練習すれば練習するほど、上手になります。", kana: "れんしゅうすればれんしゅうするほど、じょうずになります。", romaji: "Renshuu sureba renshuu suru hodo, jouzu ni narimasu.", tip: "Group 3 verb する." }
+      { id: 1, english: "The sooner, the better.", japanese: "早ければ早いほどいいです。", kana: "はやければはやいほどいいです。", romaji: "Hayakereba hayai hodo ii desu.", tip: "I-adjective: 早い → 早ければ早いほど." },
+      { id: 2, english: "The more I think about it, the less I understand.", japanese: "考えれば考えるほどわかりません。", kana: "かんがえればかんがえるほどわかりません。", romaji: "Kangaereba kangaeru hodo wakarimasen.", tip: "Verb 考える → 考えれば考えるほど." },
+      { id: 3, english: "The more you practice, the better you get.", japanese: "練習すればするほど上手になります。", kana: "れんしゅうすればするほどじょうずになります。", romaji: "Renshuu sureba suru hodo jouzu ni narimasu.", tip: "する verb: すれば するほど (no need to repeat 練習)." },
+      { id: 4, english: "The more you speak Japanese, the better you get.", japanese: "日本語は話せば話すほど上手になります。", kana: "にほんごははなせばはなすほどじょうずになります。", romaji: "Nihongo wa hanaseba hanasu hodo jouzu ni narimasu.", tip: "Verb 話す → 話せば話すほど." },
+      { id: 5, english: "The more time passes, the more worried I become.", japanese: "時間がたてばたつほど心配になります。", kana: "じかんがたてばたつほどしんぱいになります。", romaji: "Jikan ga tateba tatsu hodo shinpai ni narimasu.", tip: "Verb たつ (to pass) → たてばたつほど." }
     ]
   },
   "と言っても過言ではない (it’s no exaggeration to say that)": {
