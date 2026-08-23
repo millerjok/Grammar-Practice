@@ -1,4 +1,4 @@
-import { GrammarLevel } from './types.js';
+import type { GrammarLevel } from './types.js';
 
 export const grammarLevels: GrammarLevel[] = [
   {
