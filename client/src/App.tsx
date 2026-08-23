@@ -7,21 +7,27 @@ import {
   RefreshCw, 
   Eye, 
   EyeOff, 
-  School,
   Printer,
   Copy,
   Sun,
-  Moon
+  Moon,
+  Languages,
+  Layers3,
+  Keyboard,
+  Sparkles,
+  CheckCircle2
 } from 'lucide-react';
 import type { GrammarLevel, GrammarData, Question } from '@shared/schema';
+import { grammarLevels as staticGrammarLevels } from '../../server/data/grammarLevels';
+import { grammarQuestions } from './data/grammarQuestions';
 
 const TARGET_KANJI = "一二三四五六七八九十百千万本人回才円番春夏秋冬日月火水木金土曜年時分夕半午毎週間今先朝晩昼夜去目口耳手体上中下右左前後東西南北外学校英語文漢字勉強父母子家族兄弟姉妹友私男女大小好安高新古多少楽長近正広早明行来休出入生見思書言話読売買食飲知作住会使着発聞帰持待教乗働動歩終始泊洗立考習山川田島花海天雨雪牛魚馬犬京都市県州国町神寺駅店電車道旅赤青白黒色銀々何紙元気活社自物名方院所屋肉場飯洋和病次同仕事点";
 
-const LEVEL_STYLES: Record<string, { color: string; textDark: string; textLight: string }> = {
-  "Level 1": { color: "bg-red-900/30 border-red-800/50", textDark: "text-red-200", textLight: "text-red-700" },
-  "Level 2": { color: "bg-blue-900/30 border-blue-800/50", textDark: "text-blue-200", textLight: "text-blue-700" },
-  "Level 3": { color: "bg-emerald-900/30 border-emerald-800/50", textDark: "text-emerald-200", textLight: "text-emerald-700" },
-  "Level 4": { color: "bg-violet-900/30 border-violet-800/50", textDark: "text-violet-200", textLight: "text-violet-700" },
+const LEVEL_STYLES: Record<string, { accent: string; number: string }> = {
+  "Level 1": { accent: "mac-level-coral", number: "01" },
+  "Level 2": { accent: "mac-level-blue", number: "02" },
+  "Level 3": { accent: "mac-level-mint", number: "03" },
+  "Level 4": { accent: "mac-level-violet", number: "04" },
 };
 
 const HighlightKanji = ({ text }: { text: string }) => {
@@ -33,7 +39,7 @@ const HighlightKanji = ({ text }: { text: string }) => {
         return (
           <span 
             key={index} 
-            className={isTarget ? "text-yellow-400 font-bold" : ""}
+            className={isTarget ? "mac-kanji-highlight" : ""}
           >
             {char}
           </span>
@@ -44,69 +50,80 @@ const HighlightKanji = ({ text }: { text: string }) => {
 };
 
 const Header = ({ theme, toggleTheme }: { theme: 'dark' | 'light', toggleTheme: () => void }) => (
-  <header className={`${theme === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'} border-b sticky top-0 z-10 transition-colors duration-200`}>
-    <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div className="flex items-center space-x-2">
-        <div className="bg-red-600 text-white p-2 rounded-lg">
-          <School size={24} />
-        </div>
-        <div>
-          <h1 data-testid="text-app-title" className={`text-xl font-bold ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Japanese Grammar</h1>
-          <p className="text-xs text-slate-400 font-medium tracking-wide">Chiaki Education</p>
-        </div>
+  <header className="mac-menubar no-print">
+    <div className="mac-menubar-inner">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="mac-menu-logo"><Languages size={15} strokeWidth={2.5} /></div>
+        <span data-testid="text-app-title" className="mac-menu-title">Japanese Grammar</span>
+        <span className="mac-menu-divider" />
+        <span className="mac-menu-context">Chiaki Education</span>
       </div>
-      <button
-        data-testid="button-toggle-theme"
-        onClick={toggleTheme}
-        className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
-        aria-label="Toggle theme"
-      >
-        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-      </button>
+      <div className="flex items-center gap-3">
+        <span className="mac-menu-status"><span className="mac-status-dot" /> Ready to practise</span>
+        <button
+          data-testid="button-toggle-theme"
+          onClick={toggleTheme}
+          className="mac-theme-toggle"
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+          <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
+        </button>
+      </div>
     </div>
   </header>
 );
 
-const LevelCard = ({ level, onSelect, theme }: { level: GrammarLevel, onSelect: (item: string, levelName: string) => void, theme: 'dark' | 'light' }) => {
+const LevelCard = ({ level, onSelect }: { level: GrammarLevel, onSelect: (item: string, levelName: string) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const style = LEVEL_STYLES[level.level] || LEVEL_STYLES["Level 1"];
 
   return (
-    <div className="mb-4">
+    <div className={`mac-level-shell ${style.accent} ${isOpen ? 'is-open' : ''}`}>
       <button 
         data-testid={`button-level-${level.level}`}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full text-left p-4 flex justify-between items-center border transition-all duration-200 cursor-pointer ${style.color} ${theme === 'dark' ? style.textDark : style.textLight} ${isOpen ? 'rounded-t-xl border-b-0' : 'rounded-xl hover:brightness-110'}`}
+        className="mac-level-card"
+        aria-expanded={isOpen}
       >
-        <div>
-          <h2 className="text-xl font-bold">{level.level}</h2>
-          <span className="text-sm font-medium opacity-80">{level.description}</span>
+        <div className="flex items-center gap-4 min-w-0">
+          <div className="mac-level-icon">
+            <span>{style.number}</span>
+            <Layers3 size={17} />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h2 className="mac-level-title">{level.level}</h2>
+              <span className="mac-level-count">{level.sections.reduce((sum, section) => sum + section.items.length, 0)} topics</span>
+            </div>
+            <span className="mac-level-description">{level.description}</span>
+        </div>
         </div>
         <ChevronDown 
-          className={`transition-transform duration-200 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} ${isOpen ? 'rotate-180' : ''}`} 
-          size={24} 
+          className={`mac-chevron ${isOpen ? 'rotate-180' : ''}`}
+          size={18}
         />
       </button>
 
       {isOpen && (
-        <div className={`${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} border rounded-b-xl shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200`}>
+        <div className="mac-level-content animate-in fade-in slide-in-from-top-1 duration-200">
           {level.sections.map((section, idx) => (
-            <div key={idx} className={`border-b last:border-0 ${theme === 'dark' ? 'border-slate-700' : 'border-slate-100'}`}>
+            <div key={idx} className="mac-section">
               {section.title !== "Core Expressions" && section.title !== "Basic Actions & Requests" && (
-                <div className={`px-6 py-2 text-xs font-bold uppercase tracking-wider ${theme === 'dark' ? 'bg-slate-900/50 text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
-                  {section.title}
+                <div className="mac-section-title">
+                  <span />{section.title}
                 </div>
               )}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
+              <div className="mac-topic-grid">
                 {section.items.map((item: string, i: number) => (
                   <button
                     key={i}
                     data-testid={`button-grammar-${item}`}
                     onClick={() => onSelect(item, level.level)}
-                    className={`text-left px-6 py-4 transition-colors duration-200 border-r last:border-r-0 flex items-center justify-between group cursor-pointer ${theme === 'dark' ? 'hover:bg-slate-700 border-slate-700' : 'hover:bg-slate-50 border-slate-100'}`}
+                    className="mac-grammar-item group"
                   >
-                    <span className={`font-medium group-hover:text-red-400 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>{item}</span>
-                    <ChevronRight size={16} className={`group-hover:text-red-400 ${theme === 'dark' ? 'text-slate-600' : 'text-slate-300'}`} />
+                    <span>{item}</span>
+                    <ChevronRight size={15} />
                   </button>
                 ))}
               </div>
@@ -118,7 +135,7 @@ const LevelCard = ({ level, onSelect, theme }: { level: GrammarLevel, onSelect: 
   );
 };
 
-const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: string, level: string, onBack: () => void, theme: 'dark' | 'light' }) => {
+const PracticeView = ({ grammarPoint, level, onBack }: { grammarPoint: string, level: string, onBack: () => void }) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [usage, setUsage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -135,11 +152,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: st
     setShowAllAnswers(false);
 
     try {
-      const response = await fetch(`/api/grammar/questions/${encodeURIComponent(grammarPoint)}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch questions from server");
-      }
-      const data: GrammarData = await response.json();
+      const data: GrammarData = grammarQuestions[grammarPoint] || grammarQuestions["default"];
       
       if (data && data.exercises) {
         setQuestions(data.exercises);
@@ -203,7 +216,7 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: st
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="mac-practice-page">
       <div className="print-only">
         <div className="mb-8">
           <div className="flex justify-between items-end border-b-2 border-black pb-4 mb-6">
@@ -271,136 +284,144 @@ const PracticeView = ({ grammarPoint, level, onBack, theme }: { grammarPoint: st
       <button 
         data-testid="button-back"
         onClick={onBack} 
-        className={`flex items-center mb-6 transition-colors no-print ${theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+        className="mac-back-button no-print"
       >
-        <ArrowLeft size={18} className="mr-2" />
-        Back to Grammar List
+        <span><ArrowLeft size={15} /></span>
+        Grammar Library
       </button>
 
-      <div className={`rounded-2xl p-8 shadow-lg border mb-8 text-center relative overflow-hidden no-print ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 to-pink-600"></div>
-        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider mb-3 ${theme === 'dark' ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>
-          {level}
-        </span>
-        <h2 data-testid="text-grammar-point" className={`text-3xl font-bold mb-2 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>{grammarPoint}</h2>
-        
-        <div className="min-h-[2rem] mb-3 flex justify-center">
+      <section className="mac-practice-hero no-print">
+        <div className="mac-practice-orb"><BookOpen size={25} /></div>
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="mac-eyebrow"><Sparkles size={12} /> Practice session</span>
+            <span className="mac-level-badge">{level}</span>
+          </div>
+          <h2 data-testid="text-grammar-point" className="mac-practice-title">{grammarPoint}</h2>
+          <p className="mac-practice-subtitle">Translate each sentence into Japanese, then reveal the model response.</p>
+        </div>
+
+        <div className="mac-usage-panel">
+          <span className="mac-usage-label">Structure</span>
+          <div className="min-h-[1.75rem] flex items-center">
            {usage ? (
-             <div className={`inline-block px-4 py-2 rounded-lg border backdrop-blur-sm shadow-inner ${theme === 'dark' ? 'bg-slate-900/50 border-slate-600' : 'bg-slate-50 border-slate-200'}`}>
-               <span data-testid="text-usage" className={`font-mono text-sm font-medium tracking-wide ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-600'}`}>{usage}</span>
-             </div>
+             <span data-testid="text-usage" className="mac-usage-rule">{usage}</span>
            ) : loading ? (
-             <div className={`h-8 w-64 rounded-lg animate-pulse ${theme === 'dark' ? 'bg-slate-700/50' : 'bg-slate-200'}`}></div>
+             <div className="h-5 w-48 rounded-md animate-pulse bg-current opacity-10"></div>
            ) : null}
+          </div>
         </div>
+      </section>
 
-        <p className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Translate the sentences below into Japanese.</p>
-      </div>
-
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 no-print">
-        <div className="flex items-center space-x-2">
+      <div className="mac-toolbar no-print">
+        <div className="mac-toolbar-title">
+          <Keyboard size={16} />
+          <span>{questions.length || 5} exercises</span>
         </div>
-        <div className="flex space-x-3">
+        <div className="mac-toolbar-actions">
           <button 
             data-testid="button-print"
             onClick={handlePrint}
             disabled={loading || !!error || questions.length === 0}
-            className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50 ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
+            className="mac-toolbar-button"
           >
-            <Printer size={16} className="mr-2"/>
-            Print Worksheet
+            <Printer size={15}/>
+            <span>Print</span>
           </button>
           <button 
             data-testid="button-copy"
             onClick={handleCopy}
             disabled={loading || !!error || questions.length === 0}
-            className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50 ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
+            className="mac-toolbar-button"
           >
-            <Copy size={16} className="mr-2"/>
-            Copy Questions
+            <Copy size={15}/>
+            <span>Copy</span>
           </button>
           <button 
             data-testid="button-toggle-all"
             onClick={toggleAll}
             disabled={loading || !!error}
-            className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-colors shadow-sm ${theme === 'dark' ? 'bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
+            className="mac-toolbar-button"
           >
-            {showAllAnswers ? <EyeOff size={16} className="mr-2"/> : <Eye size={16} className="mr-2"/>}
+            {showAllAnswers ? <EyeOff size={15}/> : <Eye size={15}/>}
             {showAllAnswers ? "Hide All" : "Show All"}
           </button>
           <button 
             data-testid="button-regenerate"
             onClick={() => generateQuestions()}
             disabled={loading}
-            className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm disabled:opacity-50"
+            className="mac-toolbar-button mac-primary-button"
           >
-            <RefreshCw size={16} className={`mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Regenerate
+            <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
+            New set
           </button>
         </div>
       </div>
 
       {loading ? (
-        <div className="space-y-4 animate-pulse no-print">
+        <div className="space-y-3 animate-pulse no-print">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className={`h-32 rounded-xl border ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}></div>
+            <div key={i} className="h-28 rounded-2xl mac-skeleton"></div>
           ))}
         </div>
       ) : error ? (
-        <div className={`text-center py-12 rounded-xl border no-print ${theme === 'dark' ? 'bg-red-900/20 border-red-800/50' : 'bg-red-50 border-red-200'}`}>
-          <p data-testid="text-error" className={`mb-4 ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>{error}</p>
+        <div className="mac-error-panel no-print">
+          <p data-testid="text-error" className="mb-4">{error}</p>
           <button 
             data-testid="button-try-again"
             onClick={() => generateQuestions()}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
+            className="mac-toolbar-button mac-primary-button"
           >
             Try Again
           </button>
         </div>
       ) : (
-        <div className="space-y-4 no-print">
-          {questions.map((q) => {
+        <div className="space-y-3 no-print">
+          {questions.map((q, index) => {
             const isRevealed = revealedIds.has(q.id);
             return (
               <div 
                 key={q.id} 
                 data-testid={`card-question-${q.id}`}
                 onClick={() => toggleReveal(q.id)}
-                className={`rounded-xl border p-6 cursor-pointer transition-all duration-200 group ${
-                  theme === 'dark' 
-                    ? 'bg-slate-800 border-slate-700 hover:border-indigo-500 hover:shadow-lg' 
-                    : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-md'
-                }`}
+                className={`mac-question-card group ${isRevealed ? 'is-revealed' : ''}`}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggleReveal(q.id);
+                  }
+                }}
               >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className={`text-lg font-medium pr-8 ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>{q.english}</h3>
-                  <div className={`p-2 rounded-full ${
-                    isRevealed 
-                      ? (theme === 'dark' ? 'bg-indigo-900/50 text-indigo-400' : 'bg-indigo-50 text-indigo-600') 
-                      : (theme === 'dark' ? 'bg-slate-700 text-slate-500 group-hover:bg-indigo-900/30 group-hover:text-indigo-400' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-500')
-                  }`}>
-                    {isRevealed ? <EyeOff size={18} /> : <BookOpen size={18} />}
+                <div className="mac-question-topline">
+                  <div className="mac-question-number">{String(index + 1).padStart(2, '0')}</div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="mac-question-english">{q.english}</h3>
+                    {!isRevealed && (
+                      <p className="mac-reveal-hint">Select to reveal the model answer</p>
+                    )}
+                  </div>
+                  <div className="mac-reveal-control">
+                    {isRevealed ? <EyeOff size={17} /> : <Eye size={17} />}
                   </div>
                 </div>
 
-                <div className={`transition-all duration-300 overflow-hidden ${isRevealed ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className={`pt-4 border-t mt-2 space-y-1 ${theme === 'dark' ? 'border-slate-700' : 'border-slate-100'}`}>
-                    <p className={`text-xl font-bold font-sans-jp ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'}`}>
-                      <HighlightKanji text={q.japanese} />
-                    </p>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{q.kana}</p>
-                    <div className="flex justify-between items-end mt-2">
-                       <p className={`text-xs italic ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>{q.romaji}</p>
-                       <span className={`text-xs px-2 py-1 rounded ${theme === 'dark' ? 'bg-indigo-900/50 text-indigo-300' : 'bg-indigo-50 text-indigo-700'}`}>
-                         Tip: {q.tip}
-                       </span>
+                <div className={`mac-answer-reveal ${isRevealed ? 'is-visible' : ''}`}>
+                  <div className="mac-answer-panel">
+                    <div className="mac-answer-check"><CheckCircle2 size={16} /></div>
+                    <div className="flex-1 min-w-0">
+                      <p className="mac-japanese-answer font-sans-jp">
+                        <HighlightKanji text={q.japanese} />
+                      </p>
+                      <p className="mac-kana-answer">{q.kana}</p>
+                      <div className="mac-answer-meta">
+                        <p>{q.romaji}</p>
+                        <span><Sparkles size={11} /> {q.tip}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                
-                {!isRevealed && (
-                   <p className={`text-sm italic mt-2 ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>Click to reveal translation</p>
-                )}
               </div>
             );
           })}
@@ -415,20 +436,21 @@ export default function App() {
   const [levelsLoading, setLevelsLoading] = useState(true);
   const [selectedGrammar, setSelectedGrammar] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const savedTheme = window.localStorage.getItem('grammar-studio-theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
 
   useEffect(() => {
-    fetch('/api/grammar/levels')
-      .then(res => res.json())
-      .then(data => {
-        setGrammarLevels(data);
-        setLevelsLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to load grammar levels:', err);
-        setLevelsLoading(false);
-      });
+    setGrammarLevels(staticGrammarLevels);
+    setLevelsLoading(false);
   }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem('grammar-studio-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
@@ -446,43 +468,79 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-200 ${theme === 'dark' ? 'bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-900'} print:bg-white print:text-black`}>
+    <div className={`mac-desktop ${theme} print:bg-white print:text-black`}>
+      <div className="mac-wallpaper-shape mac-wallpaper-shape-one" />
+      <div className="mac-wallpaper-shape mac-wallpaper-shape-two" />
       <Header theme={theme} toggleTheme={toggleTheme} />
-      
-      <main className="py-8">
-        {!selectedGrammar ? (
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="text-center mb-10">
-              <h2 className={`text-3xl font-bold mb-3 ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>Select a Grammar Point</h2>
-              <p className={`${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Choose a topic below to generate practice exercises.</p>
+
+      <div className="mac-window-wrap no-print-shell">
+        <div className="mac-window">
+          <div className="mac-window-titlebar no-print">
+            <div className="mac-traffic-lights" aria-hidden="true">
+              <span className="mac-light-red" />
+              <span className="mac-light-yellow" />
+              <span className="mac-light-green" />
             </div>
-            
-            {levelsLoading ? (
-              <div className="space-y-4 animate-pulse">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className={`h-20 rounded-xl border ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}></div>
-                ))}
+            <div className="mac-window-title">
+              <Languages size={14} />
+              <span>Grammar Studio</span>
+            </div>
+            <div className="mac-window-chip">日本語</div>
+          </div>
+
+          <main className="mac-window-content">
+            {!selectedGrammar ? (
+              <div className="mac-library-page">
+                <section className="mac-hero">
+                  <div className="mac-hero-copy">
+                    <span className="mac-eyebrow"><Sparkles size={12} /> Japanese learning studio</span>
+                    <h2>Build stronger sentences,<br/><span>one pattern at a time.</span></h2>
+                    <p>Choose a grammar level, practise with clear examples, and reveal each answer when you are ready.</p>
+                  </div>
+                  <div className="mac-hero-stats" aria-label="Course overview">
+                    <div><strong>4</strong><span>Learning levels</span></div>
+                    <div><strong>{grammarLevels.reduce((sum, level) => sum + level.sections.reduce((sectionSum, section) => sectionSum + section.items.length, 0), 0) || '—'}</strong><span>Grammar topics</span></div>
+                    <div><strong>5</strong><span>Examples per set</span></div>
+                  </div>
+                </section>
+
+                <div className="mac-library-heading">
+                  <div>
+                    <span className="mac-section-kicker">Grammar library</span>
+                    <h3>Select your level</h3>
+                  </div>
+                  <p>Open a level to browse its grammar patterns.</p>
+                </div>
+
+                {levelsLoading ? (
+                  <div className="space-y-3 animate-pulse">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="h-24 rounded-2xl mac-skeleton"></div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {grammarLevels.map((level, idx) => (
+                      <LevelCard key={idx} level={level} onSelect={handleSelect} />
+                    ))}
+                  </div>
+                )}
+
+                <footer className="mac-footer">
+                  <div><CheckCircle2 size={14} /> Beginner-friendly vocabulary throughout</div>
+                  <a href="mailto:soullennon41@gmail.com">Need help? Contact support</a>
+                </footer>
               </div>
             ) : (
-              grammarLevels.map((level, idx) => (
-                <LevelCard key={idx} level={level} onSelect={handleSelect} theme={theme} />
-              ))
+              <PracticeView
+                grammarPoint={selectedGrammar}
+                level={selectedLevel!}
+                onBack={handleBack}
+              />
             )}
-            
-            <div className="mt-12 text-center text-sm text-slate-600 pb-8">
-              <p>Vocabulary Limited to Japanese Beginners for Practice Clarity</p>
-              <p className="mt-2">For troubleshooting, please email: soullennon41@gmail.com</p>
-            </div>
-          </div>
-        ) : (
-          <PracticeView 
-            grammarPoint={selectedGrammar} 
-            level={selectedLevel!} 
-            onBack={handleBack} 
-            theme={theme}
-          />
-        )}
-      </main>
+          </main>
+        </div>
+      </div>
     </div>
   );
 }
